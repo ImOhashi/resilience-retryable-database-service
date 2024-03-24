@@ -1,0 +1,52 @@
+### SERVER
+server:
+  port: 8000
+
+### SPRING
+spring:
+  application:
+    name: "resilience-retryable-database-service"
+  output:
+    ansi:
+      enabled: ALWAYS
+  data:
+    mongodb:
+      uri: mongodb://resilience_retryable_database_service:toor@localhost:27017/admin
+  kafka:
+    producer:
+      bootstrap-servers: localhost:29092
+
+### LOGGING
+logging:
+  level:
+    root: INFO
+    com:
+      example: TRACE
+
+### ACTUATOR
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      base-path: /
+      exposure:
+        include: health, info
+
+### INFO ENDPOINT CONFIG
+info:
+  app:
+    name: "resilience-retryable-database-service"
+    description: "resilience-retryable-database-service powered by Leonardo Ohashi"
+  organization: "Leonardo Ohashi"
+  java-version: ${java.version}
+  java-vendor: ${java-vendor}
+
+### SWAGGER
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /docs
+    operationsSorter: method

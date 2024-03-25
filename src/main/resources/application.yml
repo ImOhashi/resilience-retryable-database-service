@@ -9,12 +9,35 @@ spring:
   output:
     ansi:
       enabled: ALWAYS
-  data:
-    mongodb:
-      uri: mongodb://resilience_retryable_database_service:toor@localhost:27017/admin
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: admin
+  jpa:
+    database-plataform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
   kafka:
     producer:
       bootstrap-servers: localhost:29092
+
+### RESILIENCE4J
+resilience4j:
+  retry:
+    instances:
+      createPersonRetry:
+        max-attemprs: 3
+        wait-duration: 4s
+        enable-exponential-backoff: true
+        exponential-backoff-multiplier: 2
+        retry-exceptions:
+          - com.ohashi.resilienceretryabledatabaseservice.domain.exception.PersonAlreadyExistsException
+        ignore-exceptions:
+          - java.lang.Exception
 
 ### LOGGING
 logging:

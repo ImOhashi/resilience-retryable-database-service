@@ -39,21 +39,27 @@ services:
     environment:
       KAFKA_BROKERCONNECT: kafka:29092
 
-  mongo:
-    container_name: mongo-resilience-retryable-database-service
-    image: mongo
+  serverpostgres:
+    container_name: postgres-resilience-retryable-database-service
+    image: postgres:11
     environment:
-      MONGO_INITDB_ROOT_USERNAME: resilience_retryable_database_service
-      MONGO_INITDB_ROOT_PASSWORD: toor
+      POSTGRES_PASSWORD: "admin"
     ports:
-      - "27017:27017"
+      - "5432:5432"
     volumes:
-      - ./database-volume:/var/lib/mongodb/data
-    networks:
-      - mongo-compose-network
+      - ./database-volume:/var/lib/postgresql/data
+
+  serverpgadmin:
+    container_name: pgadmin-resilience-retryable-database-service
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "admin@admin.com"
+      PGADMIN_DEFAULT_PASSWORD: "admin"
+    ports:
+      - "6543:80"
+    depends_on:
+      - serverpostgres
 
 networks:
   broker-kafka:
-    driver: bridge
-  mongo-compose-network:
     driver: bridge
